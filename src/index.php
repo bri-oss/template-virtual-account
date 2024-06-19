@@ -1,15 +1,16 @@
 <?php
 
-include 'util.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
 require __DIR__ . '/../briapi-sdk/autoload.php';
-use BRI\Balance\Balance;
-use BRI\Token\AccessToken;
+
+use BRI\Util\GenerateDate;
+use BRI\Util\GenerateRandomString;
+use BRI\Util\GetAccessToken;
 use BRI\Util\VarNumber;
-use BRI\Signature\Signature;
+use BRI\VirtualAccount\BrivaWS;
 
 // env values
 $clientId = $_ENV['CONSUMER_KEY']; // customer key
@@ -18,45 +19,122 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
-$path = '/snap/v1.0/balance-inquiry'; //informasi rekening api path
-$accessTokenPath = '/snap/v1.0/access-token/b2b'; //access token path
 
 // change variables accordingly
 $account = '111231271284142'; // account number
 $partnerId = 'feedloop'; //partner id
 $channelId = '12345'; // channel id
 
-//external id
-$externalId = (new VarNumber())->generateVar(9);
+$partnerServiceId = '   55888'; // partner service id
+$customerNo = (new VarNumber())->generateVar(10); // customer no
+$virtualAccountName = 'John Doe'; // virtual account name
+$total = 10000.00; // total
+$expiredDate = (new GenerateDate())->generate('+1 days');
+$trxId = (new GenerateRandomString())->generate();
+$description = 'terangkanlah';
 
-// fetches a new access token every specified minute with a maximum of 15 minutes
-$minutes = 15;
+$getAccessToken = new GetAccessToken();
 
-if (!file_exists('accessToken.txt') || isTokenExpired('timestamp.txt', $minutes)) {
-  //timestamp
-  $timestamp = (new DateTime('now', new DateTimeZone('Asia/Jakarta')))->format('Y-m-d\TH:i:s.000P');
+[$accessToken, $timestamp] = $getAccessToken->get(
+  $clientId,
+  $pKeyId,
+  $baseUrl
+);
 
-  //access token
-  $accessToken = (new AccessToken(new Signature()))->getAccessToken(
-    $clientId,
-    $pKeyId,
-    $timestamp,
-    $baseUrl,
-    $accessTokenPath,
-  );
+$brivaWs = new BrivaWS();
 
-  file_put_contents('accessToken.txt', $accessToken);
-  file_put_contents('timestamp.txt', $timestamp);
+// $response = $brivaWs->create(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo,
+//   $virtualAccountName,
+//   $total,
+//   $expiredDate,
+//   $trxId,
+//   $description // optional
+// );
 
-  echo "New Token is created\n";
-} else {
-  $accessToken = trim(file_get_contents('accessToken.txt'));
-  $timestamp = trim(file_get_contents('timestamp.txt'));
-  echo "Used Token\n";
-}
+// $response = $brivaWs->update(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo = '9196308416',
+//   $virtualAccountName,
+//   $total,
+//   $expiredDate,
+//   $trxId = 'g5VTtU',
+//   $description // optional
+// );
 
-$response = (new Balance())->inquiry($account, $clientSecret, $partnerId, $baseUrl, $path, $accessToken, $channelId, $externalId, $timestamp);
+// $response = $brivaWs->updateStatus(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo = '4498466302',
+//   $trxId = 'lvirQR',
+//   $statusPaid = 'Y'
+// );
 
-$json = json_encode($response, JSON_PRETTY_PRINT);
+// $response = $brivaWs->inquiry(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo = '4498466302',
+//   $trxId = 'lvirQR',
+// );
+
+// $response = $brivaWs->delete(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo = '4498466302',
+//   $trxId = 'lvirQR',
+// );
+
+// $response = $brivaWs->getReport(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $startDate = (new GenerateDate())->generate($modify = '+1 days', $format = 'Y-m-d'),//'2024-01-19',
+//   $startTIme = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+//   $endTime = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 23, 59),
+// );
+
+$response = $brivaWs->inquiryStatus(
+  $clientSecret = $clientSecret, 
+  $partnerId = $partnerId, 
+  $baseUrl,
+  $accessToken, 
+  $channelId,
+  $timestamp,
+  $partnerServiceId,
+  $customerNo,
+  $inquiryRequestId = (new GenerateRandomString())->generate(5),
+);
 
 echo $response;
