@@ -22,7 +22,7 @@ interface BrivaWSInterface {
     string $trxId,
     ?string $description,
     ?string $currency = 'IDR'
-  ): string|bool;
+  );
   public function update(
     string $clientSecret,
     string $partnerId,
@@ -38,7 +38,7 @@ interface BrivaWSInterface {
     string $trxId,
     ?string $description,
     ?string $currency = 'IDR'
-  ): string | bool;
+  );
   public function updateStatus(
     string $clientSecret,
     string $partnerId,
@@ -50,7 +50,7 @@ interface BrivaWSInterface {
     int $customerNo,
     string $trxId,
     string $paidStatus
-  ): string | bool;
+  );
   public function inquiry(
     string $clientSecret,
     string $partnerId,
@@ -61,7 +61,7 @@ interface BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $trxId
-  ): string | bool;
+  );
   public function delete(
     string $clientSecret,
     string $partnerId,
@@ -72,7 +72,7 @@ interface BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $trxId
-  ): string | bool;
+  );
   public function getReport(
     string $clientSecret,
     string $partnerId,
@@ -86,7 +86,7 @@ interface BrivaWSInterface {
     string $endTime,
     ?string $customerCode,
     ?string $uniqueCode
-  ): string | bool;
+  );
   public function inquiryStatus(
     string $clientSecret,
     string $partnerId,
@@ -97,7 +97,7 @@ interface BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $inquiryRequestId
-  ): string | bool;
+  );
 }
 
 class BrivaWS implements BrivaWSInterface {
@@ -133,7 +133,7 @@ class BrivaWS implements BrivaWSInterface {
     string $trxId,
     ?string $description,
     ?string $currency = 'IDR'
-  ): string|bool {
+  ) {
     // $custNo = (new VarNumber())->generateVar(10);
     // $partnerServiceId = '   55888';
     $additionalBody = [
@@ -187,7 +187,7 @@ class BrivaWS implements BrivaWSInterface {
     string $trxId,
     ?string $description,
     ?string $currency = 'IDR'
-  ): string|bool {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'customerNo' => (string) $customerNo,
@@ -237,8 +237,7 @@ class BrivaWS implements BrivaWSInterface {
     int $customerNo,
     string $trxId,
     string $paidStatus
-  ): string | bool
-  {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'customerNo' => (string) $customerNo,
@@ -279,7 +278,7 @@ class BrivaWS implements BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $trxId
-  ): string | bool {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'customerNo' => (string) $customerNo,
@@ -318,7 +317,7 @@ class BrivaWS implements BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $trxId
-  ): string | bool {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'customerNo' => (string) $customerNo,
@@ -361,7 +360,7 @@ class BrivaWS implements BrivaWSInterface {
     string $endTime,
     ?string $customerCode = null,
     ?string $uniqueCode = null
-  ): string | bool {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'startDate' => $startDate,
@@ -401,7 +400,7 @@ class BrivaWS implements BrivaWSInterface {
     string $partnerServiceId,
     int $customerNo,
     string $inquiryRequestId
-  ): string | bool {
+  ) {
     $additionalBody = [
       'partnerServiceId' => $partnerServiceId,
       'customerNo' => (string) $customerNo,
