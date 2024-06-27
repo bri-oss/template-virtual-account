@@ -10,6 +10,7 @@ use BRI\Util\GenerateDate;
 use BRI\Util\GenerateRandomString;
 use BRI\Util\GetAccessToken;
 use BRI\Util\VarNumber;
+use BRI\VirtualAccount\BrivaOnline;
 use BRI\VirtualAccount\BrivaWS;
 
 // env values
@@ -42,7 +43,11 @@ $getAccessToken = new GetAccessToken();
 );
 
 $brivaWs = new BrivaWS();
+$brivaOnline = new BrivaOnline();
 
+/**
+ * Briva WS - Create VA
+ */
 // $response = $brivaWs->create(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -59,6 +64,9 @@ $brivaWs = new BrivaWS();
 //   $description // optional
 // );
 
+/**
+ * Briva WS - Update VA
+ */
 // $response = $brivaWs->update(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -75,6 +83,9 @@ $brivaWs = new BrivaWS();
 //   $description // optional
 // );
 
+/**
+ * Briva WS - Update Status VA
+ */
 // $response = $brivaWs->updateStatus(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -88,6 +99,9 @@ $brivaWs = new BrivaWS();
 //   $statusPaid = 'Y'
 // );
 
+/**
+ * Briva WS - Inquiry VA
+ */
 // $response = $brivaWs->inquiry(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -100,6 +114,9 @@ $brivaWs = new BrivaWS();
 //   $trxId = 'lvirQR',
 // );
 
+/**
+ * Briva WS - Delete VA
+ */
 // $response = $brivaWs->delete(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -112,6 +129,9 @@ $brivaWs = new BrivaWS();
 //   $trxId = 'lvirQR',
 // );
 
+/**
+ * Briva WS - Get Report VA
+ */
 // $response = $brivaWs->getReport(
 //   $clientSecret = $clientSecret, 
 //   $partnerId = $partnerId, 
@@ -125,16 +145,63 @@ $brivaWs = new BrivaWS();
 //   $endTime = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 23, 59),
 // );
 
-$response = $brivaWs->inquiryStatus(
-  $clientSecret = $clientSecret, 
-  $partnerId = $partnerId, 
-  $baseUrl,
-  $accessToken, 
-  $channelId,
-  $timestamp,
-  $partnerServiceId,
-  $customerNo,
-  $inquiryRequestId = (new GenerateRandomString())->generate(5),
-);
+/**
+ * Briva WS - Inquiry Status VA
+ */
+// $response = $brivaWs->inquiryStatus(
+//   $clientSecret = $clientSecret, 
+//   $partnerId = $partnerId, 
+//   $baseUrl,
+//   $accessToken, 
+//   $channelId,
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo,
+//   $inquiryRequestId = (new GenerateRandomString())->generate(5),
+// );
 
-echo $response;
+/**
+ * BRIVA Online - Inquiry
+ */
+// $response = $brivaOnline->inquiry(
+//   $clientSecret,
+//   $partnerId,
+//   $baseUrl,
+//   $accessToken,
+//   $channelId = '00008',
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo,
+//   $inquiryRequestId = 'e3bcb9a2-e253-40c6-aa77-d72cc138b744',
+//   $value = '100000.00',
+//   $currency = 'IDR',
+//   $trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+//   $channelCode = 8,
+//   $sourceBankCode = '0002',
+//   $passApp = 'b7aee423dc7489dfa868426e5c950c677925',
+//   $idApp = 'test'
+// );
+
+/**
+ * BRIVA Online - Payment
+ */
+// $response = $brivaOnline->payment(
+//   $clientSecret,
+//   $partnerId,
+//   $baseUrl,
+//   $accessToken,
+//   $channelId = '00008',
+//   $timestamp,
+//   $partnerServiceId,
+//   $customerNo,
+//   $inquiryRequestId = 'e3bcb9a2-e253-40c6-aa77-d72cc138b744',
+//   $value = '100000.00',
+//   $currency = 'IDR',
+//   $trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+//   $channelCode = 8,
+//   $sourceBankCode = '0002',
+//   $passApp = 'b7aee423dc7489dfa868426e5c950c677925',
+//   $idApp = 'test'
+// );
+
+// echo $response;
