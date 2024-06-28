@@ -1,15 +1,12 @@
 <?php
+use BRI\Util\GetAccessToken;
+use BRI\VirtualAccount\BrivaWS;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
 require __DIR__ . '/../briapi-sdk/autoload.php';
-
-use BRI\Util\GenerateDate;
-use BRI\Util\GetAccessToken;
-use BRI\Util\VarNumber;
-use BRI\VirtualAccount\BrivaOnline;
 
 // env values
 $clientId = $_ENV['CONSUMER_KEY']; // customer key
@@ -23,8 +20,10 @@ $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
-$partnerServiceId = '   55888'; // partner service id
-$customerNo = (new VarNumber())->generateVar(10); // customer no
+$partnerServiceId = '   77777'; // partner service id
+$startDate = '2024-06-21';
+$startTIme = '00:00:00+07:00';
+$endTime = '22:00:00+07:00';
 
 $getAccessToken = new GetAccessToken();
 
@@ -34,28 +33,22 @@ $getAccessToken = new GetAccessToken();
   $baseUrl
 );
 
-$brivaOnline = new BrivaOnline();
+$brivaWs = new BrivaWS();
 
 /**
- * BRIVA Online - Payment
+ * Briva WS - Get Report VA
  */
-$response = $brivaOnline->payment(
-  $clientSecret,
-  $partnerId,
+$response = $brivaWs->getReport(
+  $clientSecret = $clientSecret, 
+  $partnerId = $partnerId, 
   $baseUrl,
   $accessToken,
-  $channelId = '00008',
+  $channelId,
   $timestamp,
   $partnerServiceId,
-  $customerNo,
-  $inquiryRequestId = 'e3bcb9a2-e253-40c6-aa77-d72cc138b744',
-  $value = '100000.00',
-  $currency = 'IDR',
-  $trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
-  $channelCode = 8,
-  $sourceBankCode = '0002',
-  $passApp = 'b7aee423dc7489dfa868426e5c950c677925',
-  $idApp = 'test'
+  $startDate,//(new GenerateDate())->generate($modify = '+1 days', $format = 'Y-m-d'),//'2024-01-19',
+  $startTIme, //(new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+  $endTime // (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 23, 59),
 );
 
 echo $response;

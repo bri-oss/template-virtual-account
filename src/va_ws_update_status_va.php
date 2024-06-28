@@ -1,15 +1,12 @@
 <?php
-
 require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
 require __DIR__ . '/../briapi-sdk/autoload.php';
 
-use BRI\Util\GenerateDate;
 use BRI\Util\GetAccessToken;
-use BRI\Util\VarNumber;
-use BRI\VirtualAccount\BrivaOnline;
+use BRI\VirtualAccount\BrivaWS;
 
 // env values
 $clientId = $_ENV['CONSUMER_KEY']; // customer key
@@ -24,7 +21,10 @@ $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = (new VarNumber())->generateVar(10); // customer no
+$customerNo = '4498466302'; //(new VarNumber())->generateVar(10); // customer no
+$total = 10000.00; // total
+$trxId = 'lvirQR'; //(new GenerateRandomString())->generate();
+$statusPaid = 'Y';
 
 $getAccessToken = new GetAccessToken();
 
@@ -34,28 +34,22 @@ $getAccessToken = new GetAccessToken();
   $baseUrl
 );
 
-$brivaOnline = new BrivaOnline();
+$brivaWs = new BrivaWS();
 
 /**
- * BRIVA Online - Payment
+ * Briva WS - Update Status VA
  */
-$response = $brivaOnline->payment(
-  $clientSecret,
-  $partnerId,
+$response = $brivaWs->updateStatus(
+  $clientSecret = $clientSecret, 
+  $partnerId = $partnerId, 
   $baseUrl,
-  $accessToken,
-  $channelId = '00008',
+  $accessToken, 
+  $channelId,
   $timestamp,
   $partnerServiceId,
   $customerNo,
-  $inquiryRequestId = 'e3bcb9a2-e253-40c6-aa77-d72cc138b744',
-  $value = '100000.00',
-  $currency = 'IDR',
-  $trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
-  $channelCode = 8,
-  $sourceBankCode = '0002',
-  $passApp = 'b7aee423dc7489dfa868426e5c950c677925',
-  $idApp = 'test'
+  $trxId,
+  $statusPaid
 );
 
 echo $response;
