@@ -8,6 +8,7 @@ require __DIR__ . '/../briapi-sdk/autoload.php';
 
 use BRI\Util\GenerateDate;
 use BRI\Util\GetAccessToken;
+use BRI\Util\VarNumber;
 use BRI\VirtualAccount\BrivaWS;
 
 // env values
@@ -23,12 +24,12 @@ $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = '9196308416'; // (new VarNumber())->generateVar(10); // customer no
-$virtualAccountName = 'John Doe'; // virtual account name
+$customerNo = (new VarNumber())->generateVar(10); // customer no
+$virtualAccountName = ''; // virtual account name
 $total = 10000.00; // total
 $expiredDate = (new GenerateDate())->generate('+1 days');
-$trxId = 'g5VTtU'; //(new GenerateRandomString())->generate();
-$description = 'terangkanlah';
+$trxId = ''; //(new GenerateRandomString())->generate();
+$description = '';
 
 $getAccessToken = new GetAccessToken();
 

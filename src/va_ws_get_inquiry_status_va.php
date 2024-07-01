@@ -24,8 +24,8 @@ $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
 $partnerServiceId = '   12819'; // partner service id
-$customerNo = '801234567899'; //(new VarNumber())->generateVar(10); // customer no
-$inquiryRequestId = '065ad3ca-2490-4432-8a29-0a9a7ce4904b'; // (new GenerateRandomString())->generate(5)
+$customerNo = ''; //(new VarNumber())->generateVar(10); // customer no
+$inquiryRequestId = ''; // (new GenerateRandomString())->generate(5)
 
 $getAccessToken = new GetAccessToken();
 

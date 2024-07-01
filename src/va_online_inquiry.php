@@ -25,6 +25,13 @@ $channelId = ''; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
 $customerNo = (new VarNumber())->generateVar(10); // customer no
+$$inquiryRequestId = '';
+$value = '';
+$currency = 'IDR';
+$trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0);
+$sourceBankCode = '';
+$passApp = '';
+$idApp = '';
 
 $getAccessToken = new GetAccessToken();
 
@@ -44,18 +51,18 @@ $response = $brivaOnline->inquiry(
   $partnerId,
   $baseUrl,
   $accessToken,
-  $channelId = '00008',
+  $channelId,
   $timestamp,
   $partnerServiceId,
   $customerNo,
-  $inquiryRequestId = 'e3bcb9a2-e253-40c6-aa77-d72cc138b744',
-  $value = '100000.00',
-  $currency = 'IDR',
-  $trxDateInit = (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+  $inquiryRequestId,
+  $value,
+  $currency,
+  $trxDateInit,
   $channelCode = 8,
-  $sourceBankCode = '0002',
-  $passApp = 'b7aee423dc7489dfa868426e5c950c677925',
-  $idApp = 'test'
+  $sourceBankCode,
+  $passApp,
+  $idApp
 );
 
 echo $response;
