@@ -21,8 +21,8 @@ $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = '4498466302'; //(new VarNumber())->generateVar(10); // customer no
-$trxId = 'lvirQR'; //(new GenerateRandomString())->generate();
+$customerNo = ''; //(new VarNumber())->generateVar(10); // customer no
+$trxId = ''; //(new GenerateRandomString())->generate();
 
 $getAccessToken = new GetAccessToken();
 

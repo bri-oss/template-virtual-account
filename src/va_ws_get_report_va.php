@@ -1,4 +1,6 @@
 <?php
+
+use BRI\Util\GenerateDate;
 use BRI\Util\GetAccessToken;
 use BRI\VirtualAccount\BrivaWS;
 
@@ -21,8 +23,8 @@ $partnerId = ''; //partner id
 $channelId = ''; // channel id
 
 $partnerServiceId = '   77777'; // partner service id
-$startDate = '2024-06-21';
-$startTIme = '00:00:00+07:00';
+$startDate = (new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
+$startTime = '00:00:00+07:00';
 $endTime = '22:00:00+07:00';
 
 $getAccessToken = new GetAccessToken();
@@ -47,7 +49,7 @@ $response = $brivaWs->getReport(
   $timestamp,
   $partnerServiceId,
   $startDate,//(new GenerateDate())->generate($modify = '+1 days', $format = 'Y-m-d'),//'2024-01-19',
-  $startTIme, //(new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
+  $startTime, //(new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
   $endTime // (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 23, 59),
 );
 
