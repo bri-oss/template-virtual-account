@@ -8,7 +8,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
-require __DIR__ . '/../briapi-sdk/autoload.php';
+require __DIR__ . '/../../briapi-sdk/autoload.php';
 
 // env values
 $clientId = $_ENV['CONSUMER_KEY']; // customer key
