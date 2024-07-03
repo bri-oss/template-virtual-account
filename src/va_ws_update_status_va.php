@@ -3,7 +3,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
-require __DIR__ . '/../briapi-sdk/autoload.php';
+require __DIR__ . '/../../briapi-sdk/autoload.php';
 
 use BRI\Util\GetAccessToken;
 use BRI\VirtualAccount\BrivaWS;
