@@ -17,13 +17,13 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+$partnerId = 'feedloop'; //partner id
+$channelId = '12345'; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = ''; //(new VarNumber())->generateVar(10); // customer no
+$customerNo = '5635976594'; //(new VarNumber())->generateVar(10); // customer no
 $total = 10000.00; // total
-$trxId = ''; //(new GenerateRandomString())->generate();
+$trxId = 'ySvVg3'; //(new GenerateRandomString())->generate();
 $statusPaid = 'Y';
 
 $getAccessToken = new GetAccessToken();
