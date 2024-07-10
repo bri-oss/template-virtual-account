@@ -19,11 +19,11 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+$partnerId = 'feedloop'; //partner id
+$channelId = '12345'; // channel id
 
 $partnerServiceId = '   77777'; // partner service id
-$startDate = (new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
+$startDate = '2024-06-21';//(new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
 $startTime = '00:00:00+07:00';
 $endTime = '22:00:00+07:00';
 
