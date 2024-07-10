@@ -24,11 +24,11 @@ $partnerId = 'feedloop'; //partner id
 $channelId = '12345'; // channel id
 
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = '5635976595'; //(new VarNumber())->generateVar(10); // customer no
+$customerNo = (new VarNumber())->generateVar(10); // customer no
 $virtualAccountName = 'John Doe'; // virtual account name
 $total = 10000.00; // total
 $expiredDate = '2024-07-11T17:01:10+07:00';//(new GenerateDate())->generate('+1 days');
-$trxId = 'ySvVg4'; //(new GenerateRandomString())->generate();
+$trxId = (new GenerateRandomString())->generate();
 $description = '';
 
 $getAccessToken = new GetAccessToken();
