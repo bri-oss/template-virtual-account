@@ -23,10 +23,15 @@ $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 $partnerId = 'feedloop'; //partner id
 $channelId = '12345'; // channel id
 
+if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
+  echo "Please create VA first";
+  return;
+}
+
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = '5635976593'; //(new VarNumber())->generateVar(10); // customer no
+$customerNo = trim(file_get_contents('customerNo.txt')); //(new VarNumber())->generateVar(10); // customer no
 $total = 10000.00; // total
-$trxId = 'ySvVg2'; //(new GenerateRandomString())->generate();
+$trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
 
 $getAccessToken = new GetAccessToken();
 
@@ -52,5 +57,9 @@ $response = $brivaWs->delete(
   $customerNo,
   $trxId
 );
+
+unlink('customerNo.txt');
+unlink('expiredDate.txt');
+unlink('trxId.txt');
 
 echo $response;

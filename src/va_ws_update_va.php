@@ -23,12 +23,17 @@ $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 $partnerId = 'feedloop'; //partner id
 $channelId = '12345'; // channel id
 
+if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
+  echo "Please create VA first";
+  return;
+}
+
 $partnerServiceId = '   55888'; // partner service id
-$customerNo = '5635976594'; //(new VarNumber())->generateVar(10); // customer no
+$customerNo = trim(file_get_contents('customerNo.txt')); //(new VarNumber())->generateVar(10); // customer no
 $virtualAccountName = 'John Doe'; // virtual account name
 $total = 10000.00; // total
-$expiredDate = '2024-07-11T17:01:10+07:00'; //(new GenerateDate())->generate('+1 days');
-$trxId = 'ySvVg3'; //(new GenerateRandomString())->generate();
+$expiredDate = trim(file_get_contents('expiredDate.txt')); //(new GenerateDate())->generate('+1 days');
+$trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
 $description = '';
 
 $getAccessToken = new GetAccessToken();

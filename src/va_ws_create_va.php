@@ -27,9 +27,13 @@ $partnerServiceId = '   55888'; // partner service id
 $customerNo = (new VarNumber())->generateVar(10); // customer no
 $virtualAccountName = 'John Doe'; // virtual account name
 $total = 10000.00; // total
-$expiredDate = '2024-07-11T17:01:10+07:00';//(new GenerateDate())->generate('+1 days');
+$expiredDate = (new GenerateDate())->generate('+1 days');
 $trxId = (new GenerateRandomString())->generate();
 $description = '';
+
+file_put_contents('customerNo.txt', $customerNo);
+file_put_contents('expiredDate.txt', $expiredDate);
+file_put_contents('trxId.txt', $trxId);
 
 $getAccessToken = new GetAccessToken();
 
