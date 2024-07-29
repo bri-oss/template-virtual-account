@@ -34,7 +34,7 @@ module:
 ### How to Setup Project
 
 ```bash
-1. run command `cd template-virtual-account` to change directory
+1. run command `cd briapi-template-virtual-account-php` to change directory
 2. copy .env file by typing 'cp .env.example .env' in the terminal
 3. fill the .env file with the required values
 4. run composer install to install all dependencies
