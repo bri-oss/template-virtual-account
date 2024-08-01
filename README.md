@@ -144,7 +144,7 @@ fill total example 10000.00
 2. fill partnerServiceId example '   12819'
 3. fill customerNo by default this template give you utils that can generate customerNo example 801234567899
 4. fill inquiryRequestId example '065ad3ca-2490-4432-8a29-0a9a7ce4904b'
-6. run command `php src/va_ws_get_inquiry_status.php serve`
+6. run command `php src/va_ws_get_inquiry_status_va.php serve`
 ```
 
 ## How to get CONSUMER_KEY and CONSUMER_SECRET
