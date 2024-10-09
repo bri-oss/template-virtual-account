@@ -6,8 +6,8 @@ use BRI\Util\GetAccessToken;
 use BRI\VirtualAccount\BrivaOnline;
 
 // env values
-$clientId = '';
-$clientSecret = '';
+$clientId = 'YOWoKgXf5KcATtetyq7NbfxOz6FR65Un';
+$clientSecret = 'super_secret';
 
 // url path values
 $baseUrl = 'https://api.bridex.qore.page/mock'; //base url
@@ -22,7 +22,7 @@ $accessToken = $getAccessToken->getMockOutbound(
 
 $brivaOnline = new BrivaOnline();
 
-$partnerId = '';
+$partnerId = 'YOWoKgXf5KcATtetyq7NbfxOz6FR65Un';
 
 $response = $brivaOnline->payment(
   $partnerId,
