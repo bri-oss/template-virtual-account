@@ -3,11 +3,14 @@
 use BRI\Util\GetAccessToken;
 use BRI\VirtualAccount\BrivaOnline;
 
+require __DIR__ . '/../vendor/autoload.php';
+Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
+
 require __DIR__ . '/../../briapi-sdk/autoload.php';
 
-// env values
-$clientId = 'YOWoKgXf5KcATtetyq7NbfxOz6FR65Un';
-$clientSecret = 'super_secret';
+$privateKey = $_ENV['PRIVATE_KEY'];
+$clientSecret = 'S7zgRMA0rUMf4ddkagpreoECgYEAxRkh';
+$clientId = 'your_client_id';
 
 // url path values
 $baseUrl = 'https://api.bridex.qore.page/mock'; //base url
@@ -16,8 +19,8 @@ $getAccessToken = new GetAccessToken();
 
 $accessToken = $getAccessToken->getMockOutbound(
   $clientId,
-  $clientSecret,
-  $baseUrl
+  $baseUrl,
+  $privateKey
 );
 
 $brivaOnline = new BrivaOnline();
