@@ -20,12 +20,12 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = 'feedloop'; //partner id
-$channelId = '12345'; // channel id
+$partnerId = ''; //partner id
+$channelId = ''; // channel id
 
-$partnerServiceId = '   55888'; // partner service id
+$partnerServiceId = ''; // partner service id
 $customerNo = (new VarNumber())->generateVar(10); // customer no
-$virtualAccountName = 'John Doe'; // virtual account name
+$virtualAccountName = ''; // virtual account name
 $total = 10000.00; // total
 $expiredDate = (new GenerateDate())->generate('+1 days');
 $trxId = (new GenerateRandomString())->generate();
@@ -49,10 +49,10 @@ $brivaWs = new BrivaWS();
  * Briva WS - Create VA
  */
 $response = $brivaWs->create(
-  $clientSecret = $clientSecret, 
-  $partnerId = $partnerId, 
+  $clientSecret,
+  $partnerId,
   $baseUrl,
-  $accessToken, 
+  $accessToken,
   $channelId,
   $timestamp,
   $partnerServiceId,

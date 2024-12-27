@@ -20,11 +20,11 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = 'feedloop'; //partner id
-$channelId = '12345'; // channel id
+$partnerId = ''; //partner id
+$channelId = ''; // channel id
 
-$partnerServiceId = '   12819'; // partner service id
-$customerNo = '801234567899'; //(new VarNumber())->generateVar(10); // customer no
+$partnerServiceId = ''; // partner service id
+$customerNo = ''; //(new VarNumber())->generateVar(10); // customer no
 $inquiryRequestId = (new GenerateRandomString())->generate(5);
 
 $getAccessToken = new GetAccessToken();
@@ -41,8 +41,8 @@ $brivaWs = new BrivaWS();
  * Briva WS - Inquiry Status VA
  */
 $response = $brivaWs->inquiryStatus(
-  $clientSecret = $clientSecret, 
-  $partnerId = $partnerId, 
+  $clientSecret, 
+  $partnerId, 
   $baseUrl,
   $accessToken, 
   $channelId,

@@ -20,18 +20,18 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = 'feedloop'; //partner id
-$channelId = '12345'; // channel id
+$partnerId = ''; //partner id
+$channelId = ''; // channel id
 
 if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
   echo "Please create VA first";
   return;
 }
 
-$partnerServiceId = '   55888'; // partner service id
+$partnerServiceId = ''; // partner service id
 $customerNo = trim(file_get_contents('customerNo.txt')); //(new VarNumber())->generateVar(10); // customer no
-$virtualAccountName = 'John Doe'; // virtual account name
-$total = 10000.00; // total
+$virtualAccountName = ''; // virtual account name
+$total = 0; // total
 $expiredDate = trim(file_get_contents('expiredDate.txt')); //(new GenerateDate())->generate('+1 days');
 $trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
 $description = '';
@@ -50,8 +50,8 @@ $brivaWs = new BrivaWS();
  * Briva WS - Update VA
  */
 $response = $brivaWs->update(
-  $clientSecret = $clientSecret, 
-  $partnerId = $partnerId, 
+  $clientSecret, 
+  $partnerId, 
   $baseUrl,
   $accessToken, 
   $channelId,

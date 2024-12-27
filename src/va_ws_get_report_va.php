@@ -19,13 +19,13 @@ $pKeyId = $_ENV['PRIVATE_KEY']; // private key
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
 // change variables accordingly
-$partnerId = 'feedloop'; //partner id
-$channelId = '12345'; // channel id
+$partnerId = ''; //partner id
+$channelId = ''; // channel id
 
-$partnerServiceId = '   77777'; // partner service id
-$startDate = '2024-06-21';//(new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
-$startTime = '00:00:00+07:00';
-$endTime = '22:00:00+07:00';
+$partnerServiceId = ''; // partner service id
+$startDate = '';//(new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
+$startTime = ''; // format H:i:sP
+$endTime = ''; // format H:i:sP
 
 $getAccessToken = new GetAccessToken();
 
@@ -41,8 +41,8 @@ $brivaWs = new BrivaWS();
  * Briva WS - Get Report VA
  */
 $response = $brivaWs->getReport(
-  $clientSecret = $clientSecret, 
-  $partnerId = $partnerId, 
+  $clientSecret, 
+  $partnerId, 
   $baseUrl,
   $accessToken,
   $channelId,

@@ -9,8 +9,8 @@ require __DIR__ . '/../vendor/autoload.php';
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
 
 // env values
-$clientId = 'your_client_id';
-$clientSecret = 'S7zgRMA0rUMf4ddkagpreoECgYEAxRkh';
+$clientId = '';
+$clientSecret = '';
 
 $privateKey = $_ENV['PRIVATE_KEY'];
 
@@ -27,7 +27,7 @@ $accessToken = $getAccessToken->getMockOutbound(
 
 $brivaOnline = new BrivaOnline();
 
-$partnerId = 'YOWoKgXf5KcATtetyq7NbfxOz6FR65Un';
+$partnerId = '';
 
 $response = $brivaOnline->payment(
   $partnerId,
