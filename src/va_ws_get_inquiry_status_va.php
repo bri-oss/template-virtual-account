@@ -1,55 +1,52 @@
 <?php
 
 use BRI\Util\GenerateRandomString;
-use BRI\Util\GetAccessToken;
 use BRI\Util\VarNumber;
-use BRI\VirtualAccount\BrivaWS;
 
-require __DIR__ . '/../vendor/autoload.php';
-
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-require __DIR__ . '/../../briapi-sdk/autoload.php';
-
-// env values
-$clientId = $_ENV['CONSUMER_KEY']; // customer key
-$clientSecret = $_ENV['CONSUMER_SECRET']; // customer secret
-$pKeyId = $_ENV['PRIVATE_KEY']; // private key
+require 'utils.php';
 
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
-// change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-$partnerServiceId = ''; // partner service id
-$customerNo = ''; //(new VarNumber())->generateVar(10); // customer no
-$inquiryRequestId = (new GenerateRandomString())->generate(5);
+  list($accessToken, $timestamp) = getAccessToken(
+    $clientId,
+    $privateKey,
+    $baseUrl
+  );
 
-$getAccessToken = new GetAccessToken();
+  // change variables accordingly
+  $partnerId = 'feedloop'; //partner id
+  $channelId = '12345'; // channel id
 
-[$accessToken, $timestamp] = $getAccessToken->get(
-  $clientId,
-  $pKeyId,
-  $baseUrl
-);
+  $partnerServiceId = 'akllsklas'; // partner service id
+  $customerNo = (new VarNumber())->generateVar(10); // customer no
+  $inquiryRequestId = (new GenerateRandomString())->generate(5);
 
-$brivaWs = new BrivaWS();
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId,
+    'channelId' => $channelId,
+    'partnerServiceId' => $partnerServiceId,
+    'customerNo' => (string) $customerNo,
+    'inquiryRequestId' => $inquiryRequestId
+  ]);
 
-/**
- * Briva WS - Inquiry Status VA
- */
-$response = $brivaWs->inquiryStatus(
-  $clientSecret, 
-  $partnerId, 
-  $baseUrl,
-  $accessToken, 
-  $channelId,
-  $timestamp,
-  $partnerServiceId,
-  $customerNo,
-  $inquiryRequestId,
-);
+  $response = fetchVAWSGetInquiryStatusVa(
+    $clientSecret, 
+    $validateInputs['partnerId'], 
+    $baseUrl,
+    $accessToken, 
+    $validateInputs['channelId'],
+    $timestamp,
+    $validateInputs['partnerServiceId'],
+    (int) $validateInputs['customerNo'],
+    $validateInputs['inquiryRequestId']
+  );
 
-echo $response;
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
+}

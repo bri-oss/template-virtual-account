@@ -1,68 +1,65 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
-
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-require __DIR__ . '/../../briapi-sdk/autoload.php';
-
-use BRI\Util\GenerateDate;
-use BRI\Util\GetAccessToken;
-use BRI\Util\VarNumber;
-use BRI\VirtualAccount\BrivaWS;
-
-// env values
-$clientId = $_ENV['CONSUMER_KEY']; // customer key
-$clientSecret = $_ENV['CONSUMER_SECRET']; // customer secret
-$pKeyId = $_ENV['PRIVATE_KEY']; // private key
+require 'utils.php';
 
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
-// change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
-  echo "Please create VA first";
-  return;
+  list($accessToken, $timestamp) = getAccessToken(
+    $clientId,
+    $privateKey,
+    $baseUrl
+  );
+
+  if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
+    throw new Exception("Please create VA first", 1);
+  }
+
+  // change variables accordingly
+  $partnerId = ''; //partner id
+  $channelId = ''; // channel id
+
+  $partnerServiceId = ''; // partner service id
+  $customerNo = trim(file_get_contents('customerNo.txt')); //(new VarNumber())->generateVar(10); // customer no
+  $virtualAccountName = ''; // virtual account name
+  $total = 0; // total
+  $expiredDate = trim(file_get_contents('expiredDate.txt')); //(new GenerateDate())->generate('+1 days');
+  $trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
+  $description = '';
+
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId,
+    'channelId' => $channelId,
+    'partnerServiceId' => $partnerServiceId,
+    'customerNo' => $customerNo,
+    'virtualAccountName' => $virtualAccountName,
+    'total' => (string) $total,
+    'expiredDate' => $expiredDate,
+    'trxId' => $trxId,
+    'description' => $description
+  ]);
+
+  $response = fetchVAWSUpdateVa(
+    $clientSecret, 
+    $validateInputs['partnerId'],
+    $baseUrl,
+    $accessToken, 
+    $validateInputs['channelId'],
+    $timestamp,
+    $validateInputs['partnerServiceId'],
+    (int) $validateInputs['customerNo'],
+    $validateInputs['virtualAccountName'],
+    $validateInputs['total'],
+    $validateInputs['expiredDate'],
+    $validateInputs['trxId'],
+    $validateInputs['description'] // optional
+  );
+
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
 }
-
-$partnerServiceId = ''; // partner service id
-$customerNo = trim(file_get_contents('customerNo.txt')); //(new VarNumber())->generateVar(10); // customer no
-$virtualAccountName = ''; // virtual account name
-$total = 0; // total
-$expiredDate = trim(file_get_contents('expiredDate.txt')); //(new GenerateDate())->generate('+1 days');
-$trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
-$description = '';
-
-$getAccessToken = new GetAccessToken();
-
-[$accessToken, $timestamp] = $getAccessToken->get(
-  $clientId,
-  $pKeyId,
-  $baseUrl
-);
-
-$brivaWs = new BrivaWS();
-
-/**
- * Briva WS - Update VA
- */
-$response = $brivaWs->update(
-  $clientSecret, 
-  $partnerId, 
-  $baseUrl,
-  $accessToken, 
-  $channelId,
-  $timestamp,
-  $partnerServiceId,
-  $customerNo,
-  $virtualAccountName,
-  $total,
-  $expiredDate,
-  $trxId,
-  $description // optional
-);
-
-echo $response;

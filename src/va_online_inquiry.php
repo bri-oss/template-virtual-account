@@ -1,38 +1,35 @@
 <?php
 
-use BRI\Util\GetAccessToken;
-use BRI\VirtualAccount\BrivaOnline;
-
-require __DIR__ . '/../vendor/autoload.php';
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-require __DIR__ . '/../../briapi-sdk/autoload.php';
-
-$privateKey = $_ENV['PRIVATE_KEY'];
-$clientSecret = '';
-$clientId = '';
+require 'utils.php';
 
 // url path values
 $baseUrl = 'https://api.bridex.qore.page/mock'; //base url
 
-$getAccessToken = new GetAccessToken();
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-$accessToken = $getAccessToken->getMockOutbound(
-  $clientId,
-  $baseUrl,
-  $privateKey
-);
+  $accessToken = getMockAccessToken(
+    $clientId,
+    $baseUrl,
+    $privateKey
+  );
 
-$brivaOnline = new BrivaOnline();
+  $partnerId = 'YOWoKgXf5KcATtetyq7NbfxOz6FR65Un';
 
-$partnerId = '';
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId
+  ]);
 
-$response = $brivaOnline->inquiry(
-  $partnerId,
-  $clientId,
-  $clientSecret,
-  $baseUrl,
-  $accessToken,
-);
+  $response = fetchVAOnlineInquiry(
+    $validateInputs['partnerId'],
+    $clientId,
+    $clientSecret,
+    $baseUrl,
+    $accessToken,
+  );
 
-echo $response;
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
+}

@@ -1,67 +1,69 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
-
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-require __DIR__ . '/../../briapi-sdk/autoload.php';
+require 'utils.php';
 
 use BRI\Util\GenerateDate;
 use BRI\Util\GenerateRandomString;
-use BRI\Util\GetAccessToken;
 use BRI\Util\VarNumber;
-use BRI\VirtualAccount\BrivaWS;
-
-$clientId = $_ENV['CONSUMER_KEY']; // customer key
-$clientSecret = $_ENV['CONSUMER_SECRET']; // customer secret
-$pKeyId = $_ENV['PRIVATE_KEY']; // private key
 
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
-// change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-$partnerServiceId = ''; // partner service id
-$customerNo = (new VarNumber())->generateVar(10); // customer no
-$virtualAccountName = ''; // virtual account name
-$total = 10000.00; // total
-$expiredDate = (new GenerateDate())->generate('+1 days');
-$trxId = (new GenerateRandomString())->generate();
-$description = '';
+  list($accessToken, $timestamp) = getAccessToken(
+    $clientId,
+    $privateKey,
+    $baseUrl
+  );
 
-file_put_contents('customerNo.txt', $customerNo);
-file_put_contents('expiredDate.txt', $expiredDate);
-file_put_contents('trxId.txt', $trxId);
+  // change variables accordingly
+  $partnerId = ''; //partner id
+  $channelId = ''; // channel id
 
-$getAccessToken = new GetAccessToken();
+  $partnerServiceId = ''; // partner service id
+  $customerNo = (new VarNumber())->generateVar(10); // customer no
+  $virtualAccountName = ''; // virtual account name
+  $total = '10000.00'; // total
+  $expiredDate = (new GenerateDate())->generate('+1 days');
+  $trxId = (new GenerateRandomString())->generate();
+  $description = '';
 
-[$accessToken, $timestamp] = $getAccessToken->get(
-  $clientId,
-  $pKeyId,
-  $baseUrl
-);
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId,
+    'channelId' => $channelId,
+    'partnerServiceId' => $partnerServiceId,
+    'customerNo' => $customerNo,
+    'virtualAccountName' => $virtualAccountName,
+    'total' => $total,
+    'expiredDate' => $expiredDate,
+    'trxId' => $trxId,
+    'description' => $description
+  ]);
 
-$brivaWs = new BrivaWS();
+  file_put_contents('customerNo.txt', $customerNo);
+  file_put_contents('expiredDate.txt', $expiredDate);
+  file_put_contents('trxId.txt', $trxId);
 
-/**
- * Briva WS - Create VA
- */
-$response = $brivaWs->create(
-  $clientSecret,
-  $partnerId,
-  $baseUrl,
-  $accessToken,
-  $channelId,
-  $timestamp,
-  $partnerServiceId,
-  $customerNo,
-  $virtualAccountName,
-  $total,
-  $expiredDate,
-  $trxId,
-  $description // optional
-);
+  $response = fetchVAWSCreate(
+    $clientSecret,
+    $validateInputs['partnerId'],
+    $baseUrl,
+    $accessToken,
+    $validateInputs['channelId'],
+    $timestamp,
+    $validateInputs['partnerServiceId'],
+    $validateInputs['customerNo'],
+    $validateInputs['virtualAccountName'],
+    $validateInputs['total'],
+    $validateInputs['expiredDate'],
+    $validateInputs['trxId'],
+    $validateInputs['description']
+  );
 
-echo $response;
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
+}

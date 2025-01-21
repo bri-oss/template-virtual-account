@@ -1,56 +1,52 @@
 <?php
 
-use BRI\Util\GenerateDate;
-use BRI\Util\GetAccessToken;
-use BRI\VirtualAccount\BrivaWS;
-
-require __DIR__ . '/../vendor/autoload.php';
-
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-require __DIR__ . '/../../briapi-sdk/autoload.php';
-
-// env values
-$clientId = $_ENV['CONSUMER_KEY']; // customer key
-$clientSecret = $_ENV['CONSUMER_SECRET']; // customer secret
-$pKeyId = $_ENV['PRIVATE_KEY']; // private key
+require 'utils.php';
 
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
-// change variables accordingly
-$partnerId = ''; //partner id
-$channelId = ''; // channel id
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-$partnerServiceId = ''; // partner service id
-$startDate = '';//(new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
-$startTime = ''; // format H:i:sP
-$endTime = ''; // format H:i:sP
+  list($accessToken, $timestamp) = getAccessToken(
+    $clientId,
+    $privateKey,
+    $baseUrl
+  );
 
-$getAccessToken = new GetAccessToken();
+  // change variables accordingly
+  $partnerId = ''; //partner id
+  $channelId = ''; // channel id
 
-[$accessToken, $timestamp] = $getAccessToken->get(
-  $clientId,
-  $pKeyId,
-  $baseUrl
-);
+  $partnerServiceId = ''; // partner service id
+  $startDate = '';//(new GenerateDate())->generate('+1 days', 'Y-m-d'); //'2024-06-21';
+  $startTime = ''; // format H:i:sP
+  $endTime = ''; // format H:i:sP
 
-$brivaWs = new BrivaWS();
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId,
+    'channelId' => $channelId,
+    'partnerServiceId' => $partnerServiceId,
+    'startDate' => $startDate,
+    'startTime' => $startTime,
+    'endTime' => $endTime
+  ]);
 
-/**
- * Briva WS - Get Report VA
- */
-$response = $brivaWs->getReport(
-  $clientSecret, 
-  $partnerId, 
-  $baseUrl,
-  $accessToken,
-  $channelId,
-  $timestamp,
-  $partnerServiceId,
-  $startDate,//(new GenerateDate())->generate($modify = '+1 days', $format = 'Y-m-d'),//'2024-01-19',
-  $startTime, //(new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 0, 0),
-  $endTime // (new GenerateDate())->generate($modify = null, $format = 'H:i:sP', 23, 59),
-);
+  $response = fetchVAWSGetReportVa(
+    $clientSecret, 
+    $validateInputs['partnerId'], 
+    $baseUrl,
+    $accessToken,
+    $validateInputs['channelId'],
+    $timestamp,
+    $validateInputs['partnerServiceId'],
+    $validateInputs['startDate'],
+    $validateInputs['startTime'],
+    $validateInputs['endTime']
+  );
 
-echo $response;
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
+}

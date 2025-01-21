@@ -1,40 +1,35 @@
 <?php
 
-require __DIR__ . '/../../briapi-sdk/autoload.php';
-
-use BRI\Util\GetAccessToken;
-use BRI\VirtualAccount\BrivaOnline;
-
-require __DIR__ . '/../vendor/autoload.php';
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/..' . '')->load();
-
-// env values
-$clientId = '';
-$clientSecret = '';
-
-$privateKey = $_ENV['PRIVATE_KEY'];
+require 'utils.php';
 
 // url path values
 $baseUrl = 'https://api.bridex.qore.page/mock'; //base url
 
-$getAccessToken = new GetAccessToken();
+try {
+  list($clientId, $clientSecret, $privateKey) = getCredentials();
 
-$accessToken = $getAccessToken->getMockOutbound(
-  $clientId,
-  $baseUrl,
-  $privateKey
-);
+  $accessToken = getMockAccessToken(
+    $clientId,
+    $baseUrl,
+    $privateKey
+  );
 
-$brivaOnline = new BrivaOnline();
+  $partnerId = '';
 
-$partnerId = '';
+  $validateInputs = sanitizeInput([
+    'partnerId' => $partnerId
+  ]);
 
-$response = $brivaOnline->payment(
-  $partnerId,
-  $clientId,
-  $clientSecret,
-  $baseUrl,
-  $accessToken,
-);
+  $response = fetchVAOnlinePayment(
+    $validateInputs['partnerId'],
+    $clientId,
+    $clientSecret,
+    $baseUrl,
+    $accessToken,
+  );
 
-echo $response;
+  echo $response;
+} catch (Exception $e) {
+  error_log('Error: ' . $e->getMessage());
+  exit(1);
+}
