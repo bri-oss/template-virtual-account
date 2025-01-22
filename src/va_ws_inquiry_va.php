@@ -2,6 +2,12 @@
 
 require 'utils.php';
 
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("Content-Security-Policy: default-src 'self'; script-src 'self';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("Referrer-Policy: no-referrer");
+
 // url path values
 $baseUrl = 'https://sandbox.partner.api.bri.co.id'; //base url
 
@@ -14,8 +20,12 @@ try {
     $baseUrl
   );
 
-  if (!file_exists('customerNo.txt') || !file_exists('expiredDate.txt') || !file_exists('trxId.txt')) {
-    throw new Exception("Please create VA first", 1);
+  // Validate required files
+  $requiredFiles = ['customerNo.txt', 'expiredDate.txt', 'trxId.txt'];
+  foreach ($requiredFiles as $file) {
+    if (!file_exists($file)) {
+      throw new Exception("Required file $file is missing.");
+    }
   }
 
   // change variables accordingly
@@ -26,11 +36,16 @@ try {
   $customerNo = trim(file_get_contents('customerNo.txt'));//(new VarNumber())->generateVar(10); // customer no
   $trxId = trim(file_get_contents('trxId.txt')); //(new GenerateRandomString())->generate();
 
+  // Validate inputs
+  if (!is_numeric((int) $customerNo) || strlen((int) $customerNo) !== 10) {
+    throw new Exception('Invalid customer number');
+  }
+
   $validateInputs = sanitizeInput([
     'partnerId' => $partnerId,
     'channelId' => $channelId,
     'partnerServiceId' => $partnerServiceId,
-    'customerNo' => $customerNo,
+    'customerNo' => (string) $customerNo,
     'trxId' => $trxId
   ]);
 
@@ -42,12 +57,16 @@ try {
     $validateInputs['channelId'],
     $timestamp,
     $validateInputs['partnerServiceId'],
-    $validateInputs['customerNo'],
+    (string) $validateInputs['customerNo'],
     $validateInputs['trxId']
   );
 
-  echo $response;
+  echo htmlspecialchars($response, ENT_QUOTES, 'UTF-8');
+} catch (InvalidArgumentException $e) {
+  error_log("Invalid argument: " . $e->getMessage());
+} catch (RuntimeException $e) {
+  error_log("Runtime exception: " . $e->getMessage());
 } catch (Exception $e) {
-  error_log('Error: ' . $e->getMessage());
+  error_log("Unexpected error: " . $e->getMessage());
   exit(1);
 }
