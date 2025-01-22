@@ -1,6 +1,8 @@
 <?php
 
+use BRI\Util\ExecuteCurlRequest;
 use BRI\Util\GetAccessToken;
+use BRI\Util\PrepareRequest;
 use BRI\VirtualAccount\BrivaOnline;
 use BRI\VirtualAccount\BrivaWS;
 
@@ -81,10 +83,16 @@ function fetchVAOnlineInquiry(
   string $clientId,
   string $clientSecret,
   string $baseUrl,
-  string $accessToken
+  string $accessToken,
+  ?string $passApp
 ): string {
-  $brivaOnline = new BrivaOnline();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
 
+  $brivaOnline = new BrivaOnline(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   $response = $brivaOnline->inquiry(
     $partnerId,
@@ -92,6 +100,7 @@ function fetchVAOnlineInquiry(
     $clientSecret,
     $baseUrl,
     $accessToken,
+    $passApp
   );
 
   return $response;
@@ -102,9 +111,16 @@ function fetchVAOnlinePayment(
   string $clientId,
   string $clientSecret,
   string $baseUrl,
-  string $accessToken
+  string $accessToken,
+  ?string $passApp
 ): string {
-  $brivaOnline = new BrivaOnline();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaOnline = new BrivaOnline(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   $response = $brivaOnline->payment(
     $partnerId,
@@ -112,6 +128,7 @@ function fetchVAOnlinePayment(
     $clientSecret,
     $baseUrl,
     $accessToken,
+    $passApp
   );
 
   return $response;
@@ -132,7 +149,13 @@ function fetchVAWSCreate(
   string $trxId,
   string $description
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   $response = $brivaWs->create(
     $clientSecret,
@@ -164,7 +187,13 @@ function fetchVAWSDelete(
   string $customerNo,
   string $trxId
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   $response = $brivaWs->delete(
     $clientSecret,
@@ -192,7 +221,13 @@ function fetchVAWSGetInquiryStatusVa(
   int $customerNo,
   string $inquiryRequestId,
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   /**
    * Briva WS - Inquiry Status VA
@@ -224,7 +259,13 @@ function fetchVAWSGetReportVa(
   string $startTime,
   string $endTime
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   /**
    * Briva WS - Get Report VA
@@ -256,7 +297,13 @@ function fetchVAWSInquiryVa(
   string $customerNo,
   string $trxId
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   /**
    * Briva WS - Inquiry VA
@@ -288,7 +335,13 @@ function fetchVAWSUpdateStatusVa(
   string $trxId,
   string $paidStatus
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   /**
    * Briva WS - Update Status VA
@@ -324,7 +377,13 @@ function fetchVAWSUpdateVa(
   string $trxId,
   ?string $description
 ): string {
-  $brivaWs = new BrivaWS();
+  $executeCurlRequest = new ExecuteCurlRequest();
+  $prepareRequest = new PrepareRequest();
+
+  $brivaWs = new BrivaWS(
+    $executeCurlRequest,
+    $prepareRequest
+  );
 
   /**
    * Briva WS - Update VA

@@ -21,9 +21,11 @@ try {
   );
 
   $partnerId = '';
+  $passApp = '';
 
   $validateInputs = sanitizeInput([
-    'partnerId' => $partnerId
+    'partnerId' => $partnerId,
+    'passApp' => $passApp
   ]);
 
   $response = fetchVAOnlinePayment(
@@ -32,6 +34,7 @@ try {
     $clientSecret,
     $baseUrl,
     $accessToken,
+    $validateInputs['passApp']
   );
 
   echo htmlspecialchars($response, ENT_QUOTES, 'UTF-8');
