@@ -9,7 +9,7 @@ header("X-Frame-Options: DENY");
 header("Referrer-Policy: no-referrer");
 
 // url path values
-$baseUrl = 'https://api.bridex.qore.page/mock'; //base url
+$baseUrl = 'https://api.briapidevstudio.dev.bbri.io/mock'; //base url
 
 try {
   list($clientId, $clientSecret, $privateKey) = getCredentials();
