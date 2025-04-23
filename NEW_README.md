@@ -7,6 +7,10 @@ A comprehensive PHP template for integrating with Bank Rakyat Indonesia (BRI) Vi
 - [Virtual Account - BRIVA Web Service (WS)](https://developers.bri.co.id/en/snap-bi/apidocs-virtual-account-briva-ws-snap-bi)
 
 ## Table of Contents
+- [General Issue](#general-issue)
+- [Credentials Setup](#credentials-setup)
+  - [Consumer Key & Secret](#consumer-key--secret)
+  - [Private Key Setup](#private-key-setup)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
   - [Project Setup](#project-setup)
@@ -20,12 +24,44 @@ A comprehensive PHP template for integrating with Bank Rakyat Indonesia (BRI) Vi
   - [BRIVA WS - Delete VA](#briva-ws---delete-va)
   - [BRIVA WS - Get Report](#briva-ws---get-report)
   - [BRIVA WS - Inquiry Status VA](#briva-ws---inquiry-status-va)
-- [Credentials Setup](#credentials-setup)
-  - [Consumer Key & Secret](#consumer-key--secret)
-  - [Private Key Setup](#private-key-setup)
 - [Environment Configuration](#environment-configuration)
 - [Security Considerations](#security-considerations)
 - [Disclaimer](#disclaimer)
+
+## General Issue
+**Unauthorized. Signature**
+1. Check the .env file, make sure CONSUMER_KEY, CONSUMER_SECRET, and PRIVATE_KEY are correct.
+2. Delete accessToken.txt and timestamp.txt.
+
+## Credentials Setup
+
+### Consumer Key & Secret
+
+1. Visit [BRI Developer Portal](https://developers.bri.co.id/en)
+2. Log in and navigate to "My Apps"
+3. Select your registered application
+4. Copy the "Consumer Key" and "Consumer Secret"
+
+### Private Key Setup
+
+1. Visit [BRI Developer Portal](https://developers.bri.co.id/en) and log in
+2. Navigate to "My Apps" > "Manage Snap Key" > "Add Snap Key"
+3. Generate an RSA key pair using [Crypto Tools](https://cryptotools.net/rsagen)
+4. Copy the public key into the "Snap Key" field and save
+5. Save the private key securely and add it to your `.env` file
+
+## Environment Configuration
+
+Create a `.env` file with the following structure:
+
+```
+CONSUMER_KEY=your_consumer_key_here
+CONSUMER_SECRET=your_consumer_secret_here
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQCOkAAcgCOTpZPgmxQKovWho6G3GJmxet6kYqi1wj5jTFuB8lLe
+...your full private key here...
+-----END RSA PRIVATE KEY-----"
+```
 
 ## Installation
 
@@ -501,41 +537,6 @@ $inquiryRequestId = '065ad3ca-2490-4432-8a29-0a9a7ce4904b';
     "paidStatus": "N"
   }
 }
-```
-
-## General Issue
-**Unauthorized. Signature**
-1. Check the .env file, make sure CONSUMER_KEY, CONSUMER_SECRET, and PRIVATE_KEY are correct.
-2. Delete accessToken.txt and timestamp.txt.
-
-## Credentials Setup
-
-### Consumer Key & Secret
-
-1. Visit [BRI Developer Portal](https://developers.bri.co.id/en)
-2. Log in and navigate to "My Apps"
-3. Select your registered application
-4. Copy the "Consumer Key" and "Consumer Secret"
-
-### Private Key Setup
-
-1. Visit [BRI Developer Portal](https://developers.bri.co.id/en) and log in
-2. Navigate to "My Apps" > "Manage Snap Key" > "Add Snap Key"
-3. Generate an RSA key pair using [Crypto Tools](https://cryptotools.net/rsagen)
-4. Copy the public key into the "Snap Key" field and save
-5. Save the private key securely and add it to your `.env` file
-
-## Environment Configuration
-
-Create a `.env` file with the following structure:
-
-```
-CONSUMER_KEY=your_consumer_key_here
-CONSUMER_SECRET=your_consumer_secret_here
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
-MIICXQIBAAKBgQCOkAAcgCOTpZPgmxQKovWho6G3GJmxet6kYqi1wj5jTFuB8lLe
-...your full private key here...
------END RSA PRIVATE KEY-----"
 ```
 
 ## Security Considerations
